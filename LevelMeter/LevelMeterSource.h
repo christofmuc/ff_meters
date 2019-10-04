@@ -195,11 +195,6 @@ public:
             const int         numChannels = buffer.getNumChannels ();
             const int         numSamples  = buffer.getNumSamples ();
 
-#if FF_AUDIO_ALLOW_ALLOCATIONS_IN_MEASURE_BLOCK
-#warning The use of levels.resize() is not realtime safe. Please call resize from the message thread and set this config setting to 0 via Projucer.
-            levels.resize (size_t (numChannels));
-#endif
-
             for (int channel=0; channel < std::min (numChannels, int (levels.size())); ++channel) {
                 levels [size_t (channel)].setLevels (lastMeasurement,
                                                      buffer.getMagnitude (channel, 0, numSamples),
@@ -281,7 +276,10 @@ public:
      */
     float getMaxLevel (const int channel) const
     {
-        return levels.at (size_t (channel)).max;
+		if (channel < levels.size())
+			return levels.at((size_t)channel).max;
+		else
+			return 0.0f;
     }
 
     /**
@@ -290,7 +288,10 @@ public:
      */
     float getMaxOverallLevel (const int channel) const
     {
-        return levels.at (size_t (channel)).maxOverall;
+		if (channel < levels.size())
+			return levels.at((size_t)channel).maxOverall;
+		else
+			return 0.0f;
     }
 
     /**
@@ -299,7 +300,10 @@ public:
      */
     float getRMSLevel (const int channel) const
     {
-        return levels.at (size_t (channel)).getAvgRMS();
+		if (channel < levels.size())
+			return levels.at((size_t)channel).getAvgRMS();
+		else
+			return 1.0f;
     }
 
     /**
@@ -307,7 +311,12 @@ public:
      */
     bool getClipFlag (const int channel) const
     {
-        return levels.at (size_t (channel)).clip;
+		if (channel < levels.size()) {
+			return levels.at((size_t)channel).clip;
+		}
+		else {
+			return false;
+		}
     }
 
     /**
