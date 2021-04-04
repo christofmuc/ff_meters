@@ -210,7 +210,31 @@ public:
         newDataFlag = true;
     }
 
-    /**
+	/**
+	 Call this method to create a fake measure - supply the results of the measure. This is useful e.g. when sending RMS and peak values via the network 
+	 */
+	template<typename FloatType>
+	void setBlockMeasurement(const juce::AudioBuffer<FloatType>& buffer, std::vector<float> const &magnitude, std::vector<float> const &rms)
+	{
+		lastMeasurement = juce::Time::currentTimeMillis();
+		if (!suspended) {
+			const int         numChannels = buffer.getNumChannels();
+			const int         numSamples = buffer.getNumSamples();
+
+			levels.resize(numChannels);
+
+			for (int channel = 0; channel < numChannels; ++channel) {
+				levels[channel].setLevels(lastMeasurement,
+					magnitude[channel],
+					rms[channel],
+					holdMSecs);
+			}
+		}
+
+		newDataFlag = true;
+	}
+	
+	/**
      This is called from the GUI. If processing was stalled, this will pump zeroes into the buffer,
      until the readings return to zero.
      */
