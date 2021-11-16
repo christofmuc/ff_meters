@@ -36,6 +36,7 @@
 
 #include "../JuceLibraryCode/JuceHeader.h"
 
+#include "../JuceLibraryCode/IncludeFFMeters.h"
 
 //==============================================================================
 FFAU::LevelMeter::LevelMeter (const MeterFlags type)
