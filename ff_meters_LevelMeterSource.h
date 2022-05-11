@@ -214,7 +214,7 @@ public:
 	 Call this method to create a fake measure - supply the results of the measure. This is useful e.g. when sending RMS and peak values via the network 
 	 */
 	template<typename FloatType>
-	void setBlockMeasurement(size_t myNumChannels, std::vector<FloatType> const &magnitude, std::vector<FloatType> const &rms)
+	void setBlockMeasurement(size_t myNumChannels, std::vector<FloatType> const magnitude, std::vector<FloatType> const rms)
 	{
 		lastMeasurement = juce::Time::currentTimeMillis();
 		if (!suspended) {
